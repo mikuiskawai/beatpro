@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BP Rhythm Game</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url('../../3d-abstract-space-sky-with-stars-nebula.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+            opacity: 1; /* 초기 불투명도 설정 (페이드인) */
+            transition: opacity 1.5s ease; /* 페이드인/아웃 효과 시간 조정 */
+        }
+        .long-note {
+            position: absolute;
+            margin-left: 5px;
+            width: 85px;
+            background-color: #23BAEF; /* Customize the color as needed */
+            transition: top 0.02s linear, height 0.02s linear;
+            box-shadow: 0 0 5px #23BAEF, 0 0 25px #23BAEF, 0 0 50px #23BAEF, 0 0 200px #23BAEF;
+            transform-origin: top; /* Ensures the note shrinks from the top */
+        }
+        #glow-line1 {
+            position: absolute;
+            bottom: 20px;
+            width: 100px;
+            height: 80px;
+            margin-left: -300px;
+            z-index: 2;
+        }
+        #glow1 {
+            width: 90px; /* 더 넓게 */
+            height: 25px; /* 더 높게 */
+            opacity: 0;
+            margin-top: -5px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            transition: opacity 0.3s ease, transform 0.3s ease,box-shadow 0.3s ease; /* 조금 느리게, alternate 모드로 */
+            filter: blur(6px); /* 불빛이 퍼지도록 blur 증가 */
+            position: relative;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.6); /* 빛의 흐림 효과 */
+        }
+        #glow-line2 {
+            position: absolute;
+            bottom: 20px;
+            width: 100px;
+            height: 80px;
+            margin-left: -100px;
+            z-index: 2;
+        }
+        #glow2 {
+            width: 90px; /* 더 넓게 */
+            height: 25px; /* 더 높게 */
+            opacity: 0;
+            background-color: #ffffff;
+            margin-top: -5px;
+            border-radius: 50%;
+            transition: opacity 0.3s ease, transform 0.3s ease,box-shadow 0.3s ease; /* 조금 느리게, alternate 모드로 */
+            filter: blur(6px); /* 불빛이 퍼지도록 blur 증가 */
+            position: relative;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.6); /* 빛의 흐림 효과 */
+        }
+        #glow-line3 {
+            position: absolute;
+            bottom: 20px;
+            width: 100px;
+            height: 80px;
+            margin-left: 100px;
+            z-index: 2;
+        }
+        #glow3 {
+            width: 90px; /* 더 넓게 */
+            height: 25px; /* 더 높게 */
+            opacity: 0;
+            margin-top: -5px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            transition: opacity 0.3s ease, transform 0.3s ease,box-shadow 0.3s ease; /* 조금 느리게, alternate 모드로 */
+            filter: blur(6px); /* 불빛이 퍼지도록 blur 증가 */
+            position: relative;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.6); /* 빛의 흐림 효과 */
+        }
+        #glow-line4 {
+            position: absolute;
+            bottom: 20px;
+            width: 100px;
+            height: 80px;
+            margin-left: 300px;
+            z-index: 2;
+        }
+        #glow4 {
+            width: 90px; /* 더 넓게 */
+            height: 25px; /* 더 높게 */
+            opacity: 0;
+            background-color: #ffffff;
+            margin-top: -5px;
+            border-radius: 50%;
+            transition: opacity 0.3s ease, transform 0.3s ease,box-shadow 0.3s ease; /* 조금 느리게, alternate 모드로 */
+            filter: blur(6px); /* 불빛이 퍼지도록 blur 증가 */
+            position: relative;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.6); /* 빛의 흐림 효과 */
+        }
+
+        /* 불빛이 커졌다 작아지는 효과 */
+        @keyframes glowPulse {
+            0%, 100% {
+                opacity: 0; /* 불빛이 희미하게 시작 */
+                transform: scale(0); /* 조금 작은 상태로 시작 */
+                box-shadow: 0 0 40px rgba(255, 255, 255, 0.5); /* 약한 불빛 효과 */
+            }
+            20%,80% {
+                opacity: 1; /* 최대 밝기 */
+                transform: scale(1.2); /* 크게 확장 */
+                box-shadow: 0 0 80px rgba(255, 255, 255, 1); /* 강한 불빛 */
+            }
+        }
+
+        .fade-in {
+            opacity: 1; /* 페이드인 시 서서히 나타남 */
+        }
+
+        .fade-out {
+            opacity: 0; /* 페이드아웃 시 서서히 사라짐 */
+        }
+        #black{
+            position: fixed;
+            justify-content: center;
+            align-items: center;
+            width: 400px;
+            height: 700px;
+            background-color: black;
+            opacity: 50%;
+        }
+        #whites{
+            position: fixed;
+            justify-content: left;
+            align-items: left;
+            width: 400px;
+            height: 700px;
+        }
+        #white1{
+            position: fixed;
+            width: 100px;
+            height: 700px;
+            background-color: white;
+            opacity: 0%;
+            transition: opacity 0.1s ease;
+        }
+        #white2{
+            position: fixed;
+            margin-left: 100px;
+            width: 100px;
+            height: 700px;
+            background-color: white;
+            opacity: 0%;
+            transition: opacity 0.1s ease;
+        }
+        #white3{
+            position: fixed;
+            margin-left: 200px;
+            width: 100px;
+            height: 700px;
+            background-color: white;
+            opacity: 0%;
+            transition: opacity 0.1s ease;
+        }
+        #white4{
+            position: fixed;
+            margin-left: 300px;
+            width: 100px;
+            height: 700px;
+            background-color: white;
+            opacity: 0%;
+            transition: opacity 0.1s ease;
+        }
+        #game-container {
+            position: fixed;
+            justify-content: center;
+            align-items: center;
+            width: 400px;
+            height: 700px;
+            display: flex;
+            border: 2px solid white;
+            overflow: hidden;  /* 노트가 컨테이너 안에 있도록 */
+        }
+        #red-line {
+            position: absolute;
+            bottom: 90px;
+            width: 100%;
+            height: 2px;
+            background-color: red;
+            z-index: 1;
+        }
+        .column {
+            width: 100px;
+            height: 100%;
+            position: relative;
+            overflow: visible;  /* 열의 콘텐츠가 잘리지 않도록 */
+        }
+        #background-music {
+            position: fixed;
+            opacity: 0;
+        }
+        .bebas-neue-regular {
+            font-family: "Bebas Neue", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+        .key-label {
+            position: absolute;
+            bottom: 110px; /* 빨간 선 바로 위에 위치 */
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2rem;
+            color: rgba(255, 255, 255, 0.5); /* 흐린 색상 */
+            pointer-events: none;
+        }
+
+        /* 키를 눌렀을 때 레이블 강조 */
+        .key-label.active {
+            color: rgba(255, 255, 255, 1);
+            font-size: 2.5rem;
+            transition: all 0.1s ease-in-out;
+        }
+        .note {
+            position: absolute;
+            margin-left: 5px;
+            width: 85px;
+            height: 20px;
+            background-color: #23BAEF;
+            transition: top 0.02s linear;
+            box-shadow: 0 0 2px #23BAEF, 0 0 10px #23BAEF, 0 0 20px #23BAEF, 0 0 10px #23BAEF;
+        }
+        #score {
+            transform : rotate(0.04deg); 
+            color: white;
+            text-align: center;
+            font-size: 50px;
+            margin-top: 20px;
+            font-family: "Bebas Neue";
+            transition: transform 0.5s ease, opacity 0.5s ease;
+        }
+        #fullcombo{
+            position: fixed;
+            font-family: "Bebas neue";
+            font-size: 192px;
+            color: white;
+            margin-top: -200px;
+            opacity: 0%;
+            transition: transform 0.5s ease, opacity 0.5s ease;
+        }
+        #panjung-perfect{
+            position: fixed;
+            font-family: "Bebas neue";
+            font-size: 24px;
+            color: white;
+            margin-top: 420px;
+            opacity: 0%;
+            transition: transform 0.1s ease, opacity 0.1s ease;
+            z-index: 2;
+        }
+        #panjung-slow{
+            position: fixed;
+            font-family: "Bebas neue";
+            font-size: 24px;
+            color: white;
+            margin-top: 420px;
+            opacity: 0%;
+            transition: transform 0.1s ease, opacity 0.1s ease;
+            z-index: 2;
+        }
+        #panjung-fast{
+            position: fixed;
+            font-family: "Bebas neue";
+            font-size: 24px;
+            color: white;
+            margin-top: 420px;
+            opacity: 0%;
+            transition: transform 0.1s ease, opacity 0.1s ease;
+            z-index: 2;
+        }
+        #panjung-miss{
+            position: fixed;
+            font-family: "Bebas neue";
+            font-size: 24px;
+            color: white;
+            margin-top: 420px;
+            opacity: 0%;
+            transition: transform 0.1s ease, opacity 0.1s ease;
+            z-index: 2;
+        }
+        @keyframes grow-shrink-shake {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.5) rotate(0deg);
+            }
+            60% {
+                transform: scale(1.3) rotate(-5deg);
+            }
+            70% {
+                transform: scale(1.2) rotate(5deg);
+            }
+            80% {
+                transform: scale(1.1) rotate(-2deg);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+            }
+        }
+        @keyframes fadeInOut {
+            0% { opacity: 0%; }
+            50% { opacity: 20%; }
+            100% { opacity: 0%; }
+        }
+        .animate-fade {
+            animation: fadeInOut 0.1s ease;
+        }
+        @keyframes fullcombo {
+            0% { opacity: 0%; }
+            10% { opacity: 100%; }
+            90% { opacity: 100%; }
+            100% { opacity: 0%; }
+        }
+        @keyframes panjung {
+            0% { opacity: 0%; }
+            50% { opacity: 80%; }
+            90% { opacity: 80%; }
+            100% { opacity: 0%; }
+        }
+        .animate-fullcombo {
+            animation: fullcombo 3s ease;
+        }
+        b {
+            position: fixed;
+            display: inline-block;
+            padding: 15px 20px;
+            color:#FFFFFF;
+            transition: 0.5s;
+            letter-spacing: 4px;
+            overflow: hidden;
+            font-size: 24px;
+            z-index: 1;
+            cursor: pointer;
+            margin-top: 20px;
+            margin-left: auto;
+            margin-right: auto;
+            border: 3px solid #ffffff; /* 테두리 두께와 색상 */
+        }
+
+        b:hover {
+            color: #03e9f4;
+            box-shadow: 0 0 5px #03e9f4, 0 0 25px #03e9f4, 0 0 50px #03e9f4, 0 0 200px #03e9f4;
+        }
+        .return-button {
+      position: fixed;
+      top: 15px;  /* 화면의 상단에 위치 */
+      left: 20px; /* 화면의 왼쪽에 위치 */
+      padding: 10px 20px;
+      color: #6dceff;
+      font-size: 25px;
+      border: 3px solid #6dceff; /* 테두리 두께와 색상 */
+      border-radius: 3px;
+      text-decoration: none;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      transition: background-color 0.3s, transform 0.2s;
+    }
+  
+    .return-button:hover {
+      transform: scale(1.05);
+    }
+    </style>
+</head>
+<body>
+    <b href="start.html" class="return-button" onclick="fadeOutAndRedirect(event);">⮐</b>
+    <div id="black">
+
+    </div>
+    <div id="whites">
+        <div id="white1"></div>
+        <div id="white2"></div>
+        <div id="white3"></div>
+        <div id="white4"></div>
+    </div>
+    <div id="game-container">
+            <div id="red-line"></div>
+            <div id="glow-line1"><div id="glow1"></div></div>
+            <div id="glow-line2"><div id="glow2"></div></div>
+            <div id="glow-line3"><div id="glow3"></div></div>
+            <div id="glow-line4"><div id="glow4"></div></div>
+            <div id="col-0" class="column">
+                <span class="key-label">D</span>
+            </div>
+            <div id="col-1" class="column">
+                <span class="key-label">F</span>
+            </div>
+            <div id="col-2" class="column">
+                <span class="key-label">J</span>
+            </div>
+            <div id="col-3" class="column">
+                <span class="key-label">K</span>
+            </div>
+    </div>
+
+    <div id="score">Score: 0 | Combo: 0</div>
+    <div id="panjung-perfect">Perfect</div>
+    <div id="panjung-slow">Slow</div>
+    <div id="panjung-fast">Fast</div>
+    <div id="panjung-miss">Miss</div>
+    <div id="fullcombo">Full Combo!</div>
+    <audio id="background-music" controls src="./eta.mp3" style="opacity: 0;"></audio>
+
+    <audio id="effect-sound">
+        <source src="../../512137__beezlefm__key-sound.wav" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <script src="./devastage1.js"></script>
+    <script>
+        setTimeout(() => {
+        const audio = document.getElementById('background-music');
+        audio.play();
+    }, 1500);
+        function fadeOutAndRedirect(event) {
+      event.preventDefault(); // 기본 링크 동작 방지
+      document.body.classList.add('fade-out'); // 페이드아웃 클래스 추가
+
+      // 페이드아웃 완료 후 페이지 이동
+      setTimeout(() => {
+        window.location.href = '/main.html'; // 링크의 href 속성으로 이동
+      }, 1000); // 페이드아웃 시간과 일치
+    }
+    </script>
+</body>
+</html>
+
