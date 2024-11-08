@@ -630,57 +630,63 @@
         window.location.href = '/start.html';
       }, 1000);
     }
-    let offset = localStorage.getItem('offset') ? parseInt(localStorage.getItem('offset')) : offsetsetting();
-      let speed = localStorage.getItem('speed') ? parseInt(localStorage.getItem('speed')) : speedsetting();
-      let keySound = localStorage.getItem('keySound') === 'true';
-    // 설정 모달 열기
-    function openSettings(event) {
-      event.preventDefault();
-      document.getElementById('settingsModal').style.display = 'block';
-    }
+// 최상단에서 변수 초기화
+let offset = localStorage.getItem('offset') ? parseInt(localStorage.getItem('offset')) : offsetsetting();
+let speed = localStorage.getItem('speed') ? parseInt(localStorage.getItem('speed')) : speedsetting();
+let keySound = localStorage.getItem('keySound') === 'true';
 
-    // 설정 모달 닫기
-    function closeSettings() {
-      document.getElementById('settingsModal').style.display = 'none';
-    }
-    function offsetsetting(){
-      offset = 0;
-      localStorage.setItem('offset', offset);
-    }
-    function speedsetting(){
-      speed = 10;
-      localStorage.setItem('speed', speed);
-    }
+// offset과 speed의 기본값을 설정하는 함수
+function offsetsetting() {
+  const defaultOffset = 0;
+  localStorage.setItem('offset', defaultOffset);
+  return defaultOffset;
+}
 
-    // 설정 값 로드 및 초기화
+function speedsetting() {
+  const defaultSpeed = 10;
+  localStorage.setItem('speed', defaultSpeed);
+  return defaultSpeed;
+}
 
-    document.getElementById('offsetSlider').value = offset;
-    document.getElementById('offsetValue').textContent = offset;
+// 설정 모달 열기
+function openSettings(event) {
+  event.preventDefault();
+  document.getElementById('settingsModal').style.display = 'block';
+}
 
-    document.getElementById('speedSlider').value = speed;
-    document.getElementById('speedValue').textContent = speed;
+// 설정 모달 닫기
+function closeSettings() {
+  document.getElementById('settingsModal').style.display = 'none';
+}
 
-    document.getElementById('keySoundToggle').checked = keySound;
-    document.getElementById('keySoundStatus').textContent = keySound ? "On" : "Off";
+// 설정 값 로드 및 초기화
+document.getElementById('offsetSlider').value = offset;
+document.getElementById('offsetValue').textContent = offset;
 
-    // 설정 값 업데이트 함수
-    function updateOffset() {
-      offset = parseInt(document.getElementById('offsetSlider').value);
-      document.getElementById('offsetValue').textContent = offset;
-      localStorage.setItem('offset', offset);
-    }
+document.getElementById('speedSlider').value = speed;
+document.getElementById('speedValue').textContent = speed;
 
-    function updateSpeed() {
-      speed = parseInt(document.getElementById('speedSlider').value);
-      document.getElementById('speedValue').textContent = speed;
-      localStorage.setItem('speed', speed);
-    }
+document.getElementById('keySoundToggle').checked = keySound;
+document.getElementById('keySoundStatus').textContent = keySound ? "On" : "Off";
 
-    function toggleKeySound() {
-      keySound = document.getElementById('keySoundToggle').checked;
-      document.getElementById('keySoundStatus').textContent = keySound ? "On" : "Off";
-      localStorage.setItem('keySound', keySound);
-    }
+// 설정 값 업데이트 함수
+function updateOffset() {
+  offset = parseInt(document.getElementById('offsetSlider').value);
+  document.getElementById('offsetValue').textContent = offset;
+  localStorage.setItem('offset', offset);
+}
+
+function updateSpeed() {
+  speed = parseInt(document.getElementById('speedSlider').value);
+  document.getElementById('speedValue').textContent = speed;
+  localStorage.setItem('speed', speed);
+}
+
+function toggleKeySound() {
+  keySound = document.getElementById('keySoundToggle').checked;
+  document.getElementById('keySoundStatus').textContent = keySound ? "On" : "Off";
+  localStorage.setItem('keySound', keySound);
+}
 
     // 모달 외부 클릭 시 모달 닫기
     window.onclick = function(event) {
