@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <title>BP - Home</title>
+    <style>
+        body {
+            opacity: 0; /* 초기 불투명도 설정 (페이드인) */
+            transition: opacity 1.5s ease; /* 페이드인/아웃 효과 시간 조정 */
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Bebas Neue', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+            text-align: center;
+            position: relative;
+            background-image: url(./3d-abstract-space-sky-with-stars-nebula.jpg);
+            background-size: cover;
+            background-color: #000;
+            perspective: 1000px;
+            flex-direction: column;
+        }
+
+        .fade-in {
+            opacity: 1; /* 페이드인 시 서서히 나타남 */
+        }
+
+        .fade-out {
+            opacity: 0; /* 페이드아웃 시 서서히 사라짐 */
+        }
+
+        #bp {
+            font-size: 192px;
+            font-family: "Bebas Neue";
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
+            margin-bottom: 20px;
+            z-index: 1;
+            transition: transform 0.1s ease;
+        }
+
+        /* Play 버튼 스타일 */
+        a {
+            position: relative;
+            display: inline-block;
+            padding: 20px 200px;
+            color: #03e9f4;
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: 0.5s;
+            letter-spacing: 4px;
+            overflow: hidden;
+            font-size: 24px;
+            z-index: 1;
+            cursor: pointer;
+            margin-top: 20px;
+            margin-left: auto;
+            margin-right: auto;
+            border: 1px solid #03e9f4; /* 테두리 두께와 색상 */
+        }
+
+        a:hover {
+            background: #03e9f4;
+            color: #050801;
+            box-shadow: 0 0 5px #03e9f4, 0 0 25px #03e9f4, 0 0 50px #03e9f4, 0 0 200px #03e9f4;
+            -webkit-box-reflect: below 1px linear-gradient(transparent, #0005);
+        }
+
+        a span {
+            position: absolute;
+            display: block;
+        }
+
+        a span:nth-child(1) {
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #03e9f4);
+            animation: animate1 1s linear infinite;
+        }
+
+        @keyframes animate1 {
+            0% {
+                left: -100%;
+            }
+            50%, 100% {
+                left: 100%;
+            }
+        }
+
+        a span:nth-child(2) {
+            top: -100%;
+            right: 0;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(180deg, transparent, #03e9f4);
+            animation: animate2 1s linear infinite;
+            animation-delay: 0.25s;
+        }
+
+        @keyframes animate2 {
+            0% {
+                top: -100%;
+            }
+            50%, 100% {
+                top: 100%;
+            }
+        }
+
+        a span:nth-child(3) {
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(270deg, transparent, #03e9f4);
+            animation: animate3 1s linear infinite;
+            animation-delay: 0.50s;
+        }
+
+        @keyframes animate3 {
+            0% {
+                right: -100%;
+            }
+            50%, 100% {
+                right: 100%;
+            }
+        }
+
+        a span:nth-child(4) {
+            bottom: -100%;
+            left: 0;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(360deg, transparent, #03e9f4);
+            animation: animate4 1s linear infinite;
+            animation-delay: 0.75s;
+        }
+
+        @keyframes animate4 {
+            0% {
+                bottom: -100%;
+            }
+            50%, 100% {
+                bottom: 100%;
+            }
+        }
+
+        /* Falling stars */
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+            opacity: 0.4;
+            animation: expand linear infinite;
+        }
+
+        @keyframes expand {
+            to {
+                transform: translate(var(--x), var(--y)) scale(1.5);
+                opacity: 1;
+            }
+        }
+        #background-music {
+            position: fixed;
+            opacity: 0;
+        }
+        b {
+            position: relative;
+            display: inline-block;
+            width: 32px;
+            height: 50px;
+            color:#FFFFFF;
+            transition: 0.5s;
+            letter-spacing: 4px;
+            overflow: hidden;
+            font-size: 24px;
+            z-index: 1;
+            cursor: pointer;
+            margin-top: 20px;
+            margin-left: auto;
+            margin-right: auto;
+            border: 3px solid #ffffff; /* 테두리 두께와 색상 */
+        }
+
+        b:hover {
+            color: #03e9f4;
+            box-shadow: 0 0 5px #03e9f4, 0 0 25px #03e9f4, 0 0 50px #03e9f4, 0 0 200px #03e9f4;
+        }
+        .return-button {
+        position: fixed;
+        top: 15px;  /* 화면의 상단에 위치 */
+        left: 20px; /* 화면의 왼쪽에 위치 */
+        padding: 10px 20px;
+        color: #6dceff;
+        font-size: 36px;
+        border: 3px solid #6dceff; /* 테두리 두께와 색상 */
+        border-radius: 3px;
+        text-decoration: none;
+        text-align: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        transition: background-color 0.3s, transform 0.2s;
+        }
+    
+        .return-button:hover {
+        transform: scale(1.05);
+        }
+        .setting-button {
+        position: fixed;
+        top: 15px;  /* 화면의 상단에 위치 */
+        left:120px; /* 화면의 왼쪽에 위치 */
+        padding: 10px 20px;
+        color: #6dceff;
+        font-size: 36px;
+        border: 3px solid #6dceff; /* 테두리 두께와 색상 */
+        border-radius: 3px;
+        text-decoration: none;
+        text-align: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        transition: background-color 0.3s, transform 0.2s;
+        }
+    
+        .setting-button:hover {
+        transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <a href="/creddit.html" class="return-button" id="return-button" onclick="fadeOutAndRedirect(event);">☳</a>
+    <audio id="background-music" autoplay controls src="./【PIU】Cross†Over - HyuN [Instrumental].mp3" style="opacity: 0;"></audio>
+    <audio id="click-sound" src="./615526__crash_358__sci-fi-ui-button-sound-003.wav" preload="auto"></audio>
+    <div id="bp">BEAT PRO</div>
+    <a href="main.html" onclick="playClickSound(event)" id="start-button">
+        START
+        <span></span><span></span><span></span><span></span>
+    </a>
+    <script>
+        function createStar() {
+            const star = document.createElement('div');
+            star.classList.add('star');
+
+            // 랜덤한 크기와 방향 설정
+            const size = Math.random() * 5 + 1;
+            const angle = Math.random() * 2 * Math.PI;
+            const distance = 800; // 중앙에서 퍼져나가는 거리 설정
+            const x = Math.cos(angle) * distance;
+            const y = Math.sin(angle) * distance;
+
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.left = "50%";
+            star.style.top = "50%";
+            star.style.transformOrigin = "center";
+            star.style.setProperty("--x", `${x}px`);
+            star.style.setProperty("--y", `${y}px`);
+            star.style.animationDuration = `10s`;
+
+            document.body.appendChild(star);
+
+            star.addEventListener('animationend', () => {
+                star.remove();
+            });
+        }
+
+        setInterval(createStar, 1000);
+
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth - 0.5) * 20;
+            const y = (e.clientY / window.innerHeight - 0.5) * 20;
+            
+            document.getElementById("bp").style.transform = `translate(${x}px, ${y}px)`;
+            document.getElementById("start-button").style.transform = `translate(${x}px, ${y}px)`;
+            document.getElementById("return-button").style.transform = `translate(${x}px, ${y}px)`;
+            //document.getElementById("setting-button").style.transform = `translate(${x}px, ${y}px)`;
+        });
+
+        window.addEventListener('load', () => {
+            document.body.classList.add('fade-in'); // 페이지 로드 시 페이드인 효과 적용
+        });
+
+        // 버튼 클릭 시 효과음 재생 함수
+        function playClickSound(event) {
+            event.preventDefault(); // 기본 동작(페이지 이동) 막기
+            const clickSound = document.getElementById('click-sound');
+            clickSound.play();
+
+            document.body.classList.remove('fade-in'); // 페이드인 클래스 제거
+            document.body.classList.add('fade-out'); // 페이드아웃 클래스 추가
+
+            setTimeout(() => {
+                window.location.href = "main.html";
+            }, 1500); // 페이드아웃 시간에 맞춰 페이지 전환
+        }
+    </script>
+</body>
+</html>
